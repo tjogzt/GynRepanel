@@ -1,0 +1,32 @@
+\name{runGynBenchmark}
+\alias{runGynBenchmark}
+\title{Run Gynecologic Multi-Omic Integration Benchmark}
+\usage{
+runGynBenchmark(data_list = NULL,
+                methods = c("KMeans_concat","Spectral","SNF_py","MOFA_py",
+                            "iCluster_py","MCIA_py","UMAP_HDBSCAN","GAE"),
+                seed = 42L, ...)
+}
+\arguments{
+  \item{data_list}{A list of multi-omic matrices (one matrix per omics layer).
+    多组学数据列表（每层为一个 matrix / SummarizedExperiment）。}
+  \item{methods}{Character vector of method names; defaults to all 8 methods.
+    参与基准的方法名向量，默认全部 8 种。}
+  \item{seed}{Global random seed; defaults to 42.
+    全局随机种子，默认 42。}
+  \item{\dots}{Extra arguments forwarded to the internal pipelines.
+    透传给内部流水线的额外参数。}
+}
+\value{
+A list with entries:
+  \describe{
+    \item{arimats}{22×8 ARI matrix (rows = CV folds, columns = methods).
+      22×8 真实 ARI 矩阵（行=CV 折叠，列=方法）。}
+    \item{metrics}{List containing PAC, Fiedler gap, purity gate G2, etc.
+      包含 PAC、Fiedler gap、纯度门 G2 等指标的列表。}
+  }
+}
+\description{
+Skeleton dispatcher invoking the 03-integration and 04-evaluation pipelines.
+空壳调度函数，调用 03-integration（多组学整合）与 04-evaluation（评估）流水线。
+}

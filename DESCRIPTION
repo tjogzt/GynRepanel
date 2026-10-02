@@ -1,0 +1,35 @@
+Package: GynRepanel
+Title: Gynecologic Multi-Omic Cross-Cohort Integration Benchmark
+Version: 0.1.0
+Authors@R: person("TJ", "OGZT", email="tjogzt@example.com", role=c("aut","cre"))
+Description: Implements the three-paradigm integration benchmark for OV/UCEC/CESC
+    with undecidability classification per SPIRIT 2013. Provides the layer-dose
+    response curve (2->5 omics layers), the NRCR 20-item reproducibility scaffold,
+    the MDD-based undecidability classifier (purity gate G2, and the RAINBO
+    ProMisE/CN_LOW mis-calibration quantification utility.  Local equivalence packages
+    intNMFequiv and MCIAequiv are available via Remotes (Suggests); their
+    installed versions are reported on package load.
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.3.2
+Imports:
+    stats,
+    utils
+Suggests:
+    SNFtool,
+    MOFA2,
+    iClusterPlus,
+    mixOmics,
+    intNMFequiv,
+    MCIAequiv,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    pdftools
+Remotes:
+    local::packages/intNMFequiv,
+    local::packages/MCIAequiv
+VignetteBuilder: knitr
+LazyData: true
+URL: https://github.com/tjogzt/GynRepanel
+BugReports: https://github.com/tjogzt/GynRepanel/issues

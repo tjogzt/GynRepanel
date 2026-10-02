@@ -1,0 +1,43 @@
+---
+title: "GynRepanel Introduction"
+author: "TJ OGZT"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GynRepanel Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(GynRepanel)
+```
+
+## Overview
+
+GynRepanel implements the three-paradigm integration benchmark for OV/UCEC/CESC
+with undecidability classification per SPIRIT 2013.
+
+## Example: TOST equivalence test
+
+```{r tost-example}
+set.seed(42)
+x <- rnorm(50, mean = 0, sd = 0.01)
+tost_res <- tost_equivalence(x, delta_equiv = 0.10)
+tost_res$equivalent
+tost_res$ci_90_low
+tost_res$ci_90_high
+```
+
+## Example: four-way undecidable classification
+
+```{r classify-example}
+undecidable_classify(diff =  0.60, mdd = 0.466, equiv = -0.10)
+undecidable_classify(diff =  0.00, mdd = 0.466, equiv = -0.10)
+undecidable_classify(diff = -0.80, mdd = 0.466, equiv = -0.10)
+undecidable_classify(diff =  0.30, mdd = 0.466, equiv = -0.10)
+```
