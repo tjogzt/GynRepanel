@@ -5,7 +5,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![R-CMD-check](https://img.shields.io/badge/R%20CMD%20check-PASS%20%7C%20ERROR%3D0%20WARN%3D0%20NOTE%3D1-brightgreen)](https://github.com/tjogzt/GynRepanel/actions)
-[![Zenodo DOI](https://img.shields.io/badge/Zenodo-DOI_Pending-blue)](https://zenodo.org/)
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23166946.svg)](https://doi.org/10.5281/zenodo.23166946)
+[![Topics: negative-marginal-value | undecidable-classification | covariance-fragility | multi-omics-benchmark | gynecologic-cancers | holm-tost-equivalence](https://img.shields.io/badge/topics-6_anchored-8A2BE2)](https://github.com/tjogzt/GynRepanel)
+
+---
+
+## Honesty Statement | 诚实声明
+
+**This repository provides statistically-rigorous negative-result calibration benchmarks, NOT a new state-of-the-art predictive method.** GynRepanel freezes 3 A-level findings with dual-independent-toolchain confirmation: (1) **Negative Marginal Value**: extra omics layers drop cross-cohort ARI from 0.282→0.194 (Domain A strict monotone ↓; Domain B 0.312→0.193 ↓); (2) **Undecidable Classification**: Top-1 (KMeans 0.3947) vs Top-2 (Co-assoc 0.3760) pairwise Holm $p=1.000$, champion label flips 50% across held-out cohorts, TOST N3/N4/N5 all equivalent; (3) **Covariance Fragility**: batch×platform double perturbation inflates $\lambda_2$ SE by 82.5%, marginal $\Delta\text{ARI}<0.01$ remains stable. All N1–N5 negative results are fully and transparently reported with Holm FWER control, TOST two-one-sided equivalence, and .632+ Bootstrap optimism correction (.632+ Apparent ≈ 1.010). No clinical utility is claimed; NSMP subtyping results are IJGC-2024 Level 4 retrospective evidence only.
+
+本仓库提供**校准基准**，并非新的SOTA预测方法。GynRepanel 冻结三条经双工具链验证的 A 级结论：（1）层数负边际价值；（2）方法排序不可判定；（3）协方差层脆弱性。所有负结果 N1–N5 均配备 Holm FWER、TOST 等效性及 .632+ Bootstrap 校正；未做任何临床效用宣称，NSMP 亚型结果仅限 IJGC 2024 Level 4 回顾性证据。
 
 ---
 
@@ -186,7 +195,7 @@ If you use GynRepanel in your research, please cite:
   year         = 2026,
   publisher    = {Zenodo},
   version      = {0.1.0},
-  doi          = {10.5281/zenodo.PENDING},
+  doi          = {10.5281/zenodo.23166946},
   url          = {https://github.com/tjogzt/GynRepanel}
 }
 ```

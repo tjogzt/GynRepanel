@@ -21,8 +21,8 @@ repository-code: "https://github.com/tjogzt/GynRepanel"
 url: "https://github.com/tjogzt/GynRepanel"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.PENDING"
-    description: "Zenodo Concept DOI (pending registration)"
+    value: "10.5281/zenodo.23166946"
+    description: "Zenodo Concept DOI (v2.4; 10.5281/zenodo.23166946; deposit 23166947 created 2026-10-05)"
 keywords:
   - "multi-omics benchmark"
   - "gynecologic cancer"
