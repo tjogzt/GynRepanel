@@ -64,7 +64,7 @@ ENV DEBIAN_FRONTEND=noninteractive TZ=UTC R_MAX_NUM_DLLS=256 \
 SHELL ["/bin/bash", "-lc"]
 
 # ============================================================
-# Layer 2/5 · APT sys libs + BiocManager 3.19 bootstrap
+# Layer 2/5 · APT sys libs + BiocManager 3.22 bootstrap
 # ============================================================
 # 先 COPY 3 stage scripts 以便 Layer2/3/4 RUN bash 执行 (Layer2 不需要，因为只COPY一次在Layer4前)
 COPY tools/docker_stage2_apt_bioc.sh /tmp/stage2.sh
@@ -107,6 +107,6 @@ ENTRYPOINT ["/bin/bash", "-lc", \
    echo '  · SUITE1 skeleton  SNF ARI > 0.20'; \
    echo '  · SUITE2 fiedler   eigenvalue flip = 0 / 1000'; \
    echo '  · SUITE3 .632+     20×2-fold |Δ mean-ARI| < 0.0013%'; \
-   echo '  · SUITE7 sanity    7 min pkgs + Bioc 3.19 installed'; \
+   echo '  · SUITE7 sanity    7 min pkgs + Bioc 3.22 installed'; \
    echo 'Run: R → library(GynRepanel); runGynBenchmark()'; \
    sleep infinity"]
