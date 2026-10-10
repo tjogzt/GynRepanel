@@ -8,10 +8,11 @@ set -euo pipefail
 
 cat > /tmp/l3.R <<'RSCRIPT'
   # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
-  # CRAN via repos; Bioc via BioC_mirror option (BioC_mgmt in repos is NOT enough for data pkgs)
+  # CRAN: TUNA mirror (fast from China). Bioc: official bioconductor.org (TUNA 3.22 mirror is broken — no src/contrib/PACKAGES).
   options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
-  options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
+  options(BioC_mirror = "https://bioconductor.org")
   options(Ncpus = parallel::detectCores(logical = FALSE))
+  options(timeout = 1200)  # 20 min for large annotation packages (IlluminaHumanMethylationEPIC ~150MB)
   pkgs_cran <- c(
     "SNFtool","mixOmics","dplyr","readr","tidyr","ggplot2","tibble","stringr","forcats",
     "future","furrr","future.apply","parallelly","data.table","Matrix","matrixStats",

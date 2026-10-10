@@ -55,16 +55,18 @@ echo "[OK] apt install: $(wc -l < /tmp/apt-install.log) lines"
 #                  TUNA mirrors + parallel on physical cores
 cat > /usr/local/lib/R/etc/Rprofile.site <<'SITE'
 options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
-options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
+options(BioC_mirror = "https://bioconductor.org")
 options(Ncpus = parallel::detectCores(logical = FALSE))
 options(BiocManager.check.repos.online = FALSE)
+options(timeout = 1200)
 SITE
 
 cat > /tmp/bioc.R <<'RSCRIPT'
   # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
   options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
-  options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
+  options(BioC_mirror = "https://bioconductor.org")
   options(Ncpus = parallel::detectCores(logical = FALSE))
+  options(timeout = 1200)
   if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager", repos = getOption("repos")[["CRAN"]], quiet = TRUE)
   }
