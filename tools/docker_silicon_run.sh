@@ -8,7 +8,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-echo "== Step 0/5 · 网络自愈: Colima daemon JSON & resolv.conf DNS override =="
+echo "== Step 0/5 · 网络自愈: 仅配置registry mirrors(不改DNS! lima 192.168.5.1已可用) =="
 colima ssh -- bash -lc '
   sudo mkdir -p /etc/docker
   sudo tee /etc/docker/daemon.json >/dev/null << "DAEMON"
@@ -17,21 +17,14 @@ colima ssh -- bash -lc '
     "https://mirror.ccs.tencentyun.com",
     "https://hub-mirror.c.163.com"
   ],
-  "dns": ["223.5.5.5", "119.29.29.29", "8.8.8.8"],
   "mtu": 1400
 }
 DAEMON
-  sudo tee /etc/resolv.conf << "RESOLV"
-nameserver 223.5.5.5
-nameserver 119.29.29.29
-nameserver 8.8.8.8
-options ndots:1 timeout:2 attempts:2
-RESOLV
-  echo "-- reload dockerd SIGHUP --"
+  echo "-- reload dockerd SIGHUP (registry-mirrors only, DNS left as lima default 192.168.5.1) --"
   sudo kill -SIGHUP $(pidof dockerd) 2>/dev/null || true
   sleep 3
 '
-echo "   网络自愈完成(daemon mirrors+DNS MTU 1400)"
+echo "   网络自愈完成(registry mirrors + MTU 1400; DNS=lima default 192.168.5.1)"
 
 echo "== Step 1/5 · 启动colima arm64 + rosetta (若未运行) =="
 if ! docker info >/dev/null 2>&1; then
