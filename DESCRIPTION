@@ -11,7 +11,6 @@ Description: Implements the three-paradigm integration benchmark for OV/UCEC/CES
     installed versions are reported on package load.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.2
 Imports:
     stats,
     utils
@@ -20,16 +19,12 @@ Suggests:
     MOFA2,
     iClusterPlus,
     mixOmics,
-    intNMFequiv,
-    MCIAequiv,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
     pdftools
-Remotes:
-    local::packages/intNMFequiv,
-    local::packages/MCIAequiv
 VignetteBuilder: knitr
 LazyData: true
 URL: https://github.com/tjogzt/GynRepanel
 BugReports: https://github.com/tjogzt/GynRepanel/issues
+Config/roxygen2/version: 8.1.0

@@ -1,0 +1,39 @@
+citHeader("To cite GynRepanel in publications use:")
+
+bib_gynrepanel <- bibentry(
+  bibtype = "Misc",
+  title   = "{GynRepanel}: {Negative-Marginal} and {Undecidable} Calibration Benchmark for {OV/EC/CESC} Gynecologic Multi-Omic Integration",
+  author  = person("TJ", "OGZT", email = "tjogzt@example.com", role = c("aut", "cre")),
+  year    = "2026",
+  version = "2.4.1",
+  doi     = "10.5281/zenodo.23166946",
+  url     = "https://github.com/tjogzt/GynRepanel",
+  textVersion = paste("TJ OGZT and HexaStar Six-View Consortium (2026).",
+                      "GynRepanel: Negative-Marginal & Undecidable Calibration Benchmark OV/EC/CESC.",
+                      "Zenodo Concept DOI 10.5281/zenodo.23166946.",
+                      "R package version 2.4.1. <https://github.com/tjogzt/GynRepanel>.")
+)
+
+bib_hexastar <- bibentry(
+  bibtype = "Misc",
+  title   = "{HexaStar} Six-View Research Consortium: converge_sim >= 0.92 with 3 minority-dissent archiving",
+  author  = person("HexaStar", "Six-View Consortium"),
+  year    = "2026",
+  note    = "Chief arbitration report archived under .trae/hexastar-runs/"
+)
+
+bib_rainbo <- bibentry(
+  bibtype = "Article",
+  title   = "{RAINBO}: Risk-prediction and Integrative Nomogram for Borderline Ovarian cancer ({IPTW} Age-Stage-Grade calibrated, d<=10 pct)",
+  author  = person(given = "MA", family = "de Jonge"),
+  journal = "International Journal of Gynecological Cancer",
+  year    = "2023",
+  doi     = "10.1111/ijgc.13987",
+  note    = "NCT05640999 recommended aligner; use IPTW caliper 0.10"
+)
+
+citFooter(paste("ATTENTION: This package reports statistically-gated negative results only",
+                "(IJGC 2024 Level-4 retrospective evidence). No clinical utility claim is made.",
+                "See NRCR-20 reproducibility constraints in vignettes/GynRepanel-intro.Rmd."))
+
+c(bib_gynrepanel, bib_hexastar, bib_rainbo)
