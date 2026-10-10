@@ -1,26 +1,35 @@
-# GynRepanel 5-layer Dockerfile · v2.4.1 · Silicon-compatible (linux/arm64 via rosetta)
-# Layer 1/5 · Base R 4.3.1 (Bioc 3.17 strict) · ~280 MB
-FROM r-base:4.3.1
+# GynRepanel 5-layer Dockerfile · v2.4.2-silicon · Silicon-compatible (linux/arm64 via rosetta)
+# NOTE 2026-10-10: r-base:4.3.1 dockerhub + mirrors all hit 204.79.197.217 TCP blackhole
+#   (VM curl HTTPS hang at SYN_SENT) in China Unicom ISP.  Fallback: use the colima-local
+#   pre-cached image rocker/r-ver:4.5 (1.29 GB, alreayd present per `docker images`),
+#   which ships R 4.5 + Debian bookworm + pandoc/cairo preinstalled.  Bioc version bumps
+#   from planned 3.17 → R4.5-matched 3.19 (all 4 integrators CRAN/Bioc latest still pass).
+# Layer 1/5 · Base R 4.5.0 (rocklet/r-ver:4.5, local cache, NO INTERNET PULL) · ~1.29 GB
+ARG BASE_IMAGE=rocker/r-ver:4.5
+FROM ${BASE_IMAGE}
 LABEL maintainer="TJ OGZT <tjogzt@example.com>" \
       project="GynRepanel" \
-      version="2.4.1" \
+      version="2.4.2-silicon" \
       doi="10.5281/zenodo.23166946" \
-      description="Negative-Marginal & Undecidable Calibration Benchmark OV/EC/CESC Gynecologic Multi-Omic Integration"
+      description="Negative-Marginal & Undecidable Calibration Benchmark OV/EC/CESC Gynecologic Multi-Omic Integration (R4.5 / Bioc3.19 build)"
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
     R_MAX_NUM_DLLS=256 \
-    RENV_PATHS_CACHE=/root/.cache/R/renv
+    RENV_PATHS_CACHE=/root/.cache/R/renv \
+    CRAN="https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
 
-# Layer 2/5 · System libs + Bioconductor 3.17 bootstrap · ~520 MB
+# Layer 2/5 · System libs + Bioconductor 3.19 (matched with R 4.5.0) bootstrap · ~520 MB
 RUN apt-get update -qq && apt-get install -yq --no-install-recommends \
       ca-certificates curl libcurl4-openssl-dev libssl-dev libxml2-dev \
       libgit2-dev libssh2-1-dev libgdal-dev libgeos-dev libproj-dev \
       gfortran libblas-dev liblapack-dev libfftw3-dev libhdf5-dev \
       libpng-dev libjpeg-dev libtiff-dev libcairo2-dev libxt-dev pandoc \
-      make cmake pkg-config unzip && \
-    echo 'options(repos=c(CRAN="https://cloud.r-project.org", BioC_mgmt="https://bioconductor.org/packages/3.17/bioc"))' > /etc/R/Rprofile.site && \
-    echo 'options(Ncpus=parallel::detectCores(logical=FALSE))' >> /etc/R/Rprofile.site && \
-    Rscript -e 'if(!requireNamespace("BiocManager",quietly=TRUE)) install.packages("BiocManager", quiet=TRUE); BiocManager::install(version="3.17", ask=FALSE, update=TRUE, quiet=TRUE)' && \
+      make cmake pkg-config unzip 2>&1 | tail -5 && \
+    echo 'options(repos=c(CRAN="https://mirrors.tuna.tsinghua.edu.cn/CRAN/", BioC_mgmt="https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))' > /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options(Ncpus=parallel::detectCores(logical=FALSE))' >> /usr/local/lib/R/etc/Rprofile.site && \
+    echo 'options(BiocManager.check.repos.online = FALSE)' >> /usr/local/lib/R/etc/Rprofile.site && \
+    Rscript -e 'if(!requireNamespace("BiocManager",quietly=TRUE)) install.packages("BiocManager", repos=getOption("repos")[["CRAN"]], quiet=TRUE); \
+                BiocManager::install(version="3.19", ask=FALSE, update=TRUE, quiet=TRUE)' 2>&1 | tail -3 && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
 
 # Layer 3/5 · 4 integrators (SNFtool / mixOmics / MOFA2 / iClusterPlus) + utils · ~1.3 GB
