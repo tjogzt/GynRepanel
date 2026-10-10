@@ -10,6 +10,35 @@ set -euo pipefail
 #       Instead every heavy command writes its output to /tmp/*.log and we
 #       tail the last N lines to BuildKit stdout as observability.
 
+# --- PUA fix: switch apt sources to TUNA mirror (ubuntu-ports for arm64) ---
+# Ubuntu official ports.ubuntu.com TCP connections hang from China Unicom.
+# TUNA mirror is fast (HTTP 200 < 400ms) and reliable.
+# Also set apt timeouts to prevent indefinite hangs on slow mirrors.
+cat > /etc/apt/apt.conf.d/99timeout <<'APTCONF'
+Acquire::http::Timeout "30";
+Acquire::https::Timeout "30";
+Acquire::ftp::Timeout "30";
+Acquire::Retries "3";
+Acquire::http::Pipeline-Depth "0";
+APTCONF
+
+# Replace sources with TUNA ubuntu-ports mirror (arm64)
+cat > /etc/apt/sources.list.d/ubuntu.sources <<'SOURCES'
+Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/
+Suites: noble noble-updates noble-backports
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/
+Suites: noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+SOURCES
+# Remove old sources to avoid duplicates
+rm -f /etc/apt/sources.list
+
 apt-get update -qq 1>/dev/null
 apt-get install -yq --no-install-recommends \
   ca-certificates curl libcurl4-openssl-dev libssl-dev libxml2-dev \
