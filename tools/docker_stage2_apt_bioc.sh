@@ -59,6 +59,10 @@ options(BiocManager.check.repos.online = FALSE)
 SITE
 
 cat > /tmp/bioc.R <<'RSCRIPT'
+  # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
+  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
+                    BioC_mgmt = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))
+  options(Ncpus = parallel::detectCores(logical = FALSE))
   if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager", repos = getOption("repos")[["CRAN"]], quiet = TRUE)
   }

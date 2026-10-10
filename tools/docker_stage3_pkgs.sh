@@ -7,6 +7,10 @@ set -euo pipefail
 # All package output goes to /tmp/l3-install.log, tail printed at end.
 
 cat > /tmp/l3.R <<'RSCRIPT'
+  # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
+  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
+                    BioC_mgmt = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))
+  options(Ncpus = parallel::detectCores(logical = FALSE))
   pkgs_cran <- c(
     "SNFtool","mixOmics","dplyr","readr","tidyr","ggplot2","tibble","stringr","forcats",
     "future","furrr","future.apply","parallelly","data.table","Matrix","matrixStats",
