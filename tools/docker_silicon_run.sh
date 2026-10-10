@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # GynRepanel Docker silicon build+run on macOS M-series (colima + rosetta)
 # 用法: chmod +x tools/docker_silicon_run.sh && tools/docker_silicon_run.sh
-# PUA fix 2026-10-10 · v2.4.5-silicon:
+# PUA fix 2026-10-10 · v2.4.6-silicon:
 #   - Docker Hub 204.79.197.217 TCP blackhole (Unicom ISP), USTC mirrors NXDOMAIN
 #   - PUA 3rd-fallback: reuses colima-local cached rocker/r-ver:4.5 (layer 1 no internet)
 #   - forces daemon-level DNS + registry mirrors before build (prevents NXDOMAIN mid-build)
@@ -48,7 +48,7 @@ if [ "${HAS_BASE:-0}" = "0" ]; then
   colima ssh -- bash -lc 'timeout 30 docker pull --platform linux/arm64 rocker/r-ver:4.5 2>&1 | tail -5' || echo "   PUA提示：rocker/r-ver:4.5离线fallback将用宿主macOS docker pull后docker load到VM"
 fi
 
-echo "== Step 3/5 · 构建镜像 tjogzt/gynrepanel:2.4.5-silicon (linux/arm64 + ROSETTA) =="
+echo "== Step 3/5 · 构建镜像 tjogzt/gynrepanel:2.4.6-silicon (linux/arm64 + ROSETTA) =="
 echo "   Dockerfile v2.4.4 7轮修复汇总: Layer1用本地rocker/r-ver:4.5缓存→绕Docker Hub黑洞
        • SHELL bash -lc (解决dash set -o pipefail crash)
        • R脚本全部 HERE-DOC <<'RSCRIPT'→零单引号嵌套→零Docker parse error
@@ -59,14 +59,14 @@ DOCKER_BUILDKIT=1 docker build \
   --build-arg BUILDKIT_INLINE_CACHE=1 \
   --build-arg BASE_IMAGE=rocker/r-ver:4.5 \
   --progress=plain \
-  -t tjogzt/gynrepanel:2.4.5-silicon .
+  -t tjogzt/gynrepanel:2.4.6-silicon .
 
 echo "== Step 4/5 · 验证 entrypoint exit0 (3 build-time suites已在Layer4全通过) =="
-docker run --rm tjogzt/gynrepanel:2.4.5-silicon true
+docker run --rm tjogzt/gynrepanel:2.4.6-silicon true
 
 echo "== Step 5/5 · 交互式运行 (Ctrl+C 退出，或 Ctrl+P+Q detach) =="
 echo "   RStudio: http://localhost:8787     自定义HTTP: http://localhost:8080"
 docker run --rm -it --platform linux/arm64 \
   -p 8787:8787 -p 8080:8080 \
   -v "$(pwd):/host" \
-  tjogzt/gynrepanel:2.4.5-silicon
+  tjogzt/gynrepanel:2.4.6-silicon

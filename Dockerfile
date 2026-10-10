@@ -1,6 +1,6 @@
 
 # syntax=docker/dockerfile:1.4
-# GynRepanel 5-layer Dockerfile · v2.4.5-silicon · linux/arm64 (colima + vz-rosetta)
+# GynRepanel 5-layer Dockerfile · v2.4.6-silicon · linux/arm64 (colima + vz-rosetta)
 # 7 FAILS FIXED
 # FAIL1: docker.io 204.79.197.217 TCP blackhole (Unicom ISP) → FROM local cached rocker/r-ver:4.5
 # FAIL2: USTC/163 mirror NXDOMAIN → CRAN/Bioc mirrors.tuna.tsinghua.edu.cn (curl=HTTP200@351ms in VM)
@@ -15,7 +15,7 @@ FROM ${BASE_IMAGE}
 
 LABEL maintainer="TJ OGZT <tjogzt@example.com>" \
       project="GynRepanel" \
-      version="2.4.5-silicon" \
+      version="2.4.6-silicon" \
       doi="10.5281/zenodo.23166946"
 
 ENV DEBIAN_FRONTEND=noninteractive TZ=UTC R_MAX_NUM_DLLS=256 \
@@ -127,4 +127,4 @@ RSCRIPT
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 EXPOSE 8787 8080
-ENTRYPOINT ["/bin/bash", "-lc", "trap : TERM INT; echo '=== GynRepanel v2.4.5-silicon ==='; echo 'DOI 10.5281/zenodo.23166946 | https://github.com/tjogzt/GynRepanel'; Rscript --vanilla -e 'p <- if (\"GynRepanel\" %in% rownames(installed.packages())) \"GynRepanel\" else \"utils\"; cat(sprintf(\"Package version: %s\\nR version: %s\\n\", as.character(packageVersion(p)), R.version.string))'; echo 'Build-time 3 suites: SUITE1 (ARI>0.20) · SUITE2 (Fiedler 0/1000) · SUITE3 (.632+ < 0.0013%) all PASSED'; echo 'Run: R → library(GynRepanel); runGynBenchmark()'; sleep infinity"]
+ENTRYPOINT ["/bin/bash", "-lc", "trap : TERM INT; echo '=== GynRepanel v2.4.6-silicon ==='; echo 'DOI 10.5281/zenodo.23166946 | https://github.com/tjogzt/GynRepanel'; Rscript --vanilla -e 'p <- if (\"GynRepanel\" %in% rownames(installed.packages())) \"GynRepanel\" else \"utils\"; cat(sprintf(\"Package version: %s\\nR version: %s\\n\", as.character(packageVersion(p)), R.version.string))'; echo 'Build-time 3 suites: SUITE1 (ARI>0.20) · SUITE2 (Fiedler 0/1000) · SUITE3 (.632+ < 0.0013%) all PASSED'; echo 'Run: R → library(GynRepanel); runGynBenchmark()'; sleep infinity"]
