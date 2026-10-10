@@ -74,5 +74,7 @@ Rscript --vanilla /tmp/bioc.R > /tmp/bioc-install.log 2>&1 \
   || { echo "[FATAL] BiocManager FAILED — tail -80:"; tail -80 /tmp/bioc-install.log; exit 2; }
 echo "[OK] BiocManager tail:"
 tail -3 /tmp/bioc-install.log
-rm -rf /tmp/* /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
+# Clean only stage2 artifacts — do NOT rm -rf /tmp/* (stage3.sh/stage4.sh were COPY'd there!)
+rm -f /tmp/apt-install.log /tmp/bioc-install.log /tmp/bioc.R
+rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
 exit 0
