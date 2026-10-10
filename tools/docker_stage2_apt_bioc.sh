@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Layer 2/5 — APT system libs + BiocManager 3.19 bootstrap
+# Layer 2/5 — APT system libs + BiocManager 3.22 bootstrap
 # 中英文双语说明:
-#   本脚本在容器内作为 Layer2 的 RUN 命令，安装系统依赖 + 配置清华CRAN/Bioc镜像 + 安装BiocManager 3.19 (R4.5.0匹配)
-#   This script runs inside the container as Layer 2 RUN: install system deps, configure tuna CRAN/Bioc mirrors, install BiocManager 3.19 matched to R 4.5.0
+#   本脚本在容器内作为 Layer2 的 RUN 命令，安装系统依赖 + 配置清华CRAN/Bioc镜像 + 安装BiocManager 3.22 (R4.5.0匹配)
+#   This script runs inside the container as Layer 2 RUN: install system deps, configure tuna CRAN/Bioc mirrors, install BiocManager 3.22 matched to R 4.5.0
 set -euo pipefail
 # NOTE: do NOT `set -x` — under BuildKit --progress=plain the 65535-byte
 #       stdout log buffer can fill up when apt/R emits thousands of lines,
@@ -66,7 +66,7 @@ cat > /tmp/bioc.R <<'RSCRIPT'
   if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager", repos = getOption("repos")[["CRAN"]], quiet = TRUE)
   }
-  BiocManager::install(version = "3.19", ask = FALSE, update = TRUE, quiet = TRUE)
+  BiocManager::install(version = "3.22", ask = FALSE, update = TRUE, quiet = TRUE)
   cat(sprintf("[OK] BiocManager version = %s\n", as.character(BiocManager::version())))
 RSCRIPT
 
