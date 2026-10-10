@@ -3,7 +3,8 @@
 # 中文：Layer3 在Bioc基础上安装多组学整合所需全部CRAN+Bioc包
 # English: Layer3 installs all CRAN + Bioconductor packages required for multi-omic integration analyses
 set -euo pipefail
-set -x
+# Do NOT `set -x` — heavy R output would overflow BuildKit plain stdout buffer.
+# All package output goes to /tmp/l3-install.log, tail printed at end.
 
 cat > /tmp/l3.R <<'RSCRIPT'
   pkgs_cran <- c(

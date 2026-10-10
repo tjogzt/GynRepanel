@@ -4,7 +4,11 @@
 #   本脚本在容器内作为 Layer2 的 RUN 命令，安装系统依赖 + 配置清华CRAN/Bioc镜像 + 安装BiocManager 3.19 (R4.5.0匹配)
 #   This script runs inside the container as Layer 2 RUN: install system deps, configure tuna CRAN/Bioc mirrors, install BiocManager 3.19 matched to R 4.5.0
 set -euo pipefail
-set -x
+# NOTE: do NOT `set -x` — under BuildKit --progress=plain the 65535-byte
+#       stdout log buffer can fill up when apt/R emits thousands of lines,
+#       causing the child write() to block forever (BuildKit exec deadlock).
+#       Instead every heavy command writes its output to /tmp/*.log and we
+#       tail the last N lines to BuildKit stdout as observability.
 
 apt-get update -qq 1>/dev/null
 apt-get install -yq --no-install-recommends \

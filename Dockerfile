@@ -53,7 +53,7 @@ FROM ${BASE_IMAGE}
 
 LABEL maintainer="TJ OGZT <tjogzt@example.com>" \
       project="GynRepanel" \
-      version="2.4.8-silicon" \
+      version="2.4.9-silicon" \
       doi="10.5281/zenodo.23166946"
 
 ENV DEBIAN_FRONTEND=noninteractive TZ=UTC R_MAX_NUM_DLLS=256 \
@@ -100,7 +100,7 @@ EXPOSE 8787 8080
 
 ENTRYPOINT ["/bin/bash", "-lc", \
   "trap : TERM INT; \
-   echo '=== GynRepanel v2.4.8-silicon ==='; \
+   echo '=== GynRepanel v2.4.9-silicon ==='; \
    echo 'DOI  10.5281/zenodo.23166946 | https://github.com/tjogzt/GynRepanel'; \
    Rscript --vanilla -e 'p <- if (\"GynRepanel\" %in% rownames(installed.packages())) \"GynRepanel\" else \"utils\"; cat(sprintf(\"Package version: %s\\nR version: %s\\n\", as.character(packageVersion(p)), R.version.string))'; \
    echo 'Build-time compliance suites ALL PASSED:'; \

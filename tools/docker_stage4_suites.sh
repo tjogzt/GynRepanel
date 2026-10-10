@@ -3,7 +3,8 @@
 # 中文：Layer4 构建期执行 4 套合规测试
 # English: Layer4 runs four build-time compliance test suites with deterministic seed 12345
 set -euo pipefail
-set -x
+# Do NOT `set -x` — heavy R output would overflow BuildKit plain stdout buffer.
+# All suite output goes to /tmp/suiteN.log; only the final tail is echoed.
 
 # (A) try devtools/pkgload load_all; non-fatal — failure simply triggers WARN, not exit
 set +e
