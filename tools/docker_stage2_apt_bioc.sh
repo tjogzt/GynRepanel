@@ -45,6 +45,8 @@ apt-get install -yq --no-install-recommends \
   libgit2-dev libssh2-1-dev libgdal-dev libgeos-dev libproj-dev \
   gfortran libblas-dev liblapack-dev libfftw3-dev libhdf5-dev \
   libpng-dev libjpeg-dev libtiff-dev libcairo2-dev libxt-dev pandoc \
+  libharfbuzz-dev libfribidi-dev libpoppler-cpp-dev \
+  libgl1-mesa-dev libglu1-mesa-dev libx11-dev \
   make cmake pkg-config unzip > /tmp/apt-install.log 2>&1 \
   || { echo "[FATAL] apt FAILED — full log:"; cat /tmp/apt-install.log; exit 1; }
 echo "[OK] apt install: $(wc -l < /tmp/apt-install.log) lines"
@@ -52,16 +54,16 @@ echo "[OK] apt install: $(wc -l < /tmp/apt-install.log) lines"
 # Rprofile.site — 清华 tuna CRAN + Bioc 镜像 + CPU 物理核数并行
 #                  TUNA mirrors + parallel on physical cores
 cat > /usr/local/lib/R/etc/Rprofile.site <<'SITE'
-options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-                  BioC_mgmt = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))
+options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
+options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
 options(Ncpus = parallel::detectCores(logical = FALSE))
 options(BiocManager.check.repos.online = FALSE)
 SITE
 
 cat > /tmp/bioc.R <<'RSCRIPT'
   # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
-  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-                    BioC_mgmt = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))
+  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
+  options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
   options(Ncpus = parallel::detectCores(logical = FALSE))
   if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager", repos = getOption("repos")[["CRAN"]], quiet = TRUE)

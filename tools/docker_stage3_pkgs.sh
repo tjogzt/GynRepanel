@@ -8,8 +8,9 @@ set -euo pipefail
 
 cat > /tmp/l3.R <<'RSCRIPT'
   # Set CRAN/Bioc mirrors explicitly (Rscript --vanilla does NOT load Rprofile.site)
-  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/",
-                    BioC_mgmt = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/"))
+  # CRAN via repos; Bioc via BioC_mirror option (BioC_mgmt in repos is NOT enough for data pkgs)
+  options(repos = c(CRAN = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"))
+  options(BioC_mirror = "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/")
   options(Ncpus = parallel::detectCores(logical = FALSE))
   pkgs_cran <- c(
     "SNFtool","mixOmics","dplyr","readr","tidyr","ggplot2","tibble","stringr","forcats",
