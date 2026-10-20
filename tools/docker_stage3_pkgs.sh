@@ -39,19 +39,6 @@ cat > /tmp/l3.R <<'RSCRIPT'
     quit(save = "no", status = 3)
   }
   cat(sprintf("[OK] Layer3 REQUIRED packages installed = %d rows\n", nrow(installed.packages())))
-
-  # ---- OPTIONAL set (best-effort; heavy DNA-methylation stack, NOT in DESCRIPTION) ----
-  # 可选集：甲基化/注释类重包，非项目依赖 (DESCRIPTION 未列)，安装失败仅告警不阻断构建
-  pkgs_opt <- c("minfi","bumphunter","missMethyl","TCGAbiolinks","affy","affyPLM")
-  suppressMessages(try(BiocManager::install(
-    pkgs_opt, ask = FALSE, update = FALSE, quiet = TRUE,
-    Ncpus = parallel::detectCores(logical = FALSE))))
-  miss_opt <- setdiff(pkgs_opt, rownames(installed.packages()))
-  if (length(miss_opt) > 0L) {
-    cat(sprintf("[WARN] %d OPTIONAL packages skipped: %s\n", length(miss_opt), paste(miss_opt, collapse = ", ")))
-  } else {
-    cat("[OK] Layer3 OPTIONAL packages all installed\n")
-  }
 RSCRIPT
 
 Rscript --vanilla /tmp/l3.R > /tmp/l3-install.log 2>&1 \
