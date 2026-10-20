@@ -47,6 +47,8 @@ apt-get install -yq --no-install-recommends \
   libpng-dev libjpeg-dev libtiff-dev libcairo2-dev libxt-dev pandoc \
   libharfbuzz-dev libfribidi-dev libpoppler-cpp-dev \
   libgl1-mesa-dev libglu1-mesa-dev libx11-dev \
+  libuv1-dev libfontconfig1-dev libfreetype-dev \
+  zlib1g-dev libbz2-dev liblzma-dev \
   make cmake pkg-config unzip > /tmp/apt-install.log 2>&1 \
   || { echo "[FATAL] apt FAILED — full log:"; cat /tmp/apt-install.log; exit 1; }
 echo "[OK] apt install: $(wc -l < /tmp/apt-install.log) lines"
