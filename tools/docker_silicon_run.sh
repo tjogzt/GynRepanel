@@ -54,12 +54,34 @@ DOCKER_BUILDKIT=1 docker build \
   --progress=plain \
   -t tjogzt/gynrepanel:2.4.9-silicon .
 
-echo "== Step 4/5 · 验证 entrypoint exit0 (3 build-time suites已在Layer4全通过) =="
-docker run --rm tjogzt/gynrepanel:2.4.9-silicon true
+echo "== Step 4/5 · 验证 entrypoint banner (ENTRYPOINT 末尾 sleep infinity 常驻; 轮询探针 + docker kill) =="
+# NOTE: the image ENTRYPOINT intentionally ends with `sleep infinity` (resident container for
+#       RStudio:8787 / HTTP:8080) and `trap : TERM INT` ignores SIGTERM. Passing `true` as the
+#       command does NOT stop it, so a plain `docker run` blocks forever. We instead launch it in
+#       the background, poll until the banner is complete, then hard-kill the container.
+PROBE_LOG=$(mktemp /tmp/gyn_probe.XXXXXX)
+docker run --rm --name gyn-verify tjogzt/gynrepanel:2.4.9-silicon true > "$PROBE_LOG" 2>&1 &
+RUNPID=$!
+for _ in $(seq 1 30); do
+  grep -q "runGynBenchmark" "$PROBE_LOG" 2>/dev/null && break
+  sleep 1
+done
+docker kill gyn-verify >/dev/null 2>&1 || true
+wait "$RUNPID" 2>/dev/null || true
+cat "$PROBE_LOG"
+grep -q "v2.4.9-silicon" "$PROBE_LOG" && grep -q "10.5281/zenodo.23166946" "$PROBE_LOG" \
+  || { echo "[FAIL] entrypoint banner missing version and/or DOI"; rm -f "$PROBE_LOG"; exit 4; }
+echo "[OK] entrypoint banner asserted: v2.4.9-silicon + DOI 10.5281/zenodo.23166946"
+rm -f "$PROBE_LOG"
 
 echo "== Step 5/5 · 交互式运行 (Ctrl+C 退出，或 Ctrl+P+Q detach) =="
 echo "   RStudio: http://localhost:8787     自定义HTTP: http://localhost:8080"
-docker run --rm -it --platform linux/arm64 \
-  -p 8787:8787 -p 8080:8080 \
-  -v "$(pwd):/host" \
-  tjogzt/gynrepanel:2.4.9-silicon
+if [ -t 0 ]; then
+  docker run --rm -it --platform linux/arm64 \
+    -p 8787:8787 -p 8080:8080 \
+    -v "$(pwd):/host" \
+    tjogzt/gynrepanel:2.4.9-silicon
+else
+  echo "   [skip] 非交互式终端(TTY 不可用) → 跳过常驻容器启动。手动运行："
+  echo "   docker run --rm -it -p 8787:8787 -p 8080:8080 -v \"\$(pwd):/host\" tjogzt/gynrepanel:2.4.9-silicon"
+fi
